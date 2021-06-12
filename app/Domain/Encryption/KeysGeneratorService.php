@@ -20,7 +20,7 @@ class KeysGeneratorService
 
     public function generate(User $user): void
     {
-        throw_unless(is_null($user->keys), new \Exception('Keys already created'));
+        throw_unless(is_null($user->key), new \Exception('Keys already created'));
 
         $key = $this->keyFactory->create($user->id);
         $this->keyRepository->save($key);

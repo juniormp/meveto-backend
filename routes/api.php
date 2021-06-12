@@ -21,6 +21,7 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('encryption')->group(function () {
     Route::post('getServerKey', [EncryptionController::class, 'findServerKey']);
+    Route::post('storeSecret', [EncryptionController::class, 'storeSecretData']);
 });
 
 Route::get('foo', [\App\Http\Controllers\TestController::class, 'foo']);
