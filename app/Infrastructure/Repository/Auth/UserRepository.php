@@ -15,4 +15,9 @@ class UserRepository extends BaseRepository implements IUserRepository
     {
         parent::__construct($this->model);
     }
+
+    public function findByUsername(string $username): User
+    {
+        return User::where('username', $username)->first();
+    }
 }
