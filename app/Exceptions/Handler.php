@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use App\Http\ApiCode;
+use App\Http\HttpCode;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,7 +39,19 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
+
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof ValidationException) {
+            return ResponseBuilder::asError(101)
+                ->withData($exception->errors())
+                ->withHttpCode(422)
+                ->build();
+        }
+
+        return parent::render($request, $exception);
     }
 }
