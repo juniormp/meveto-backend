@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Encryption\EncryptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
+});
+
+Route::prefix('encryption')->group(function () {
+    Route::post('getServerKey', [EncryptionController::class, 'findServerKey']);
 });
 
 Route::get('foo', [\App\Http\Controllers\TestController::class, 'foo']);
