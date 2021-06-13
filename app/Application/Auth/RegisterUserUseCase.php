@@ -7,32 +7,38 @@ namespace App\Application\Auth;
 use App\Application\Auth\Command\RegisterUserCommand;
 use App\Domain\Auth\User;
 use App\Domain\Auth\UserFactory;
-use App\Domain\Encryption\KeysGeneratorService;
+use App\Domain\Encryption\KeyFactory;
 use App\Infrastructure\Repository\Auth\IUserRepository;
+use App\Infrastructure\Repository\Encryption\IKeyRepository;
+use App\Infrastructure\Repository\Encryption\KeyRepository;
 
 class RegisterUserUseCase
 {
     private UserFactory $userFactory;
     private IUserRepository $userRepository;
-    private KeysGeneratorService $keysGeneratorService;
+    private KeyFactory $keyFactory;
+    private IKeyRepository $keyRepository;
 
     public function __construct(
         UserFactory $userFactory,
         IUserRepository $userRepository,
-        KeysGeneratorService $keysGeneratorService
+        KeyFactory $keyFactory,
+        KeyRepository $keyRepository
     )
     {
         $this->userFactory = $userFactory;
         $this->userRepository = $userRepository;
-        $this->keysGeneratorService = $keysGeneratorService;
+        $this->keyFactory = $keyFactory;
+        $this->keyRepository = $keyRepository;
     }
 
     public function execute(RegisterUserCommand $command): User
     {
         $user = $this->userFactory->create($command);
-        $this->userRepository->save($user);
+        $user = $this->userRepository->save($user);
 
-        $this->keysGeneratorService->generate($user);
+        $key = $this->keyFactory->create($user->id, $command->public_key);
+        $this->keyRepository->save($key);
 
         return $user;
     }

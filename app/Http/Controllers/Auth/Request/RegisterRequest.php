@@ -18,7 +18,7 @@ class RegisterRequest extends BaseRequest
     {
         return [
             'username' => ['required', 'string', 'min:3', 'max:20', 'unique:users'],
-            'public_key' => ['required', 'string', 'unique:users'], // validation for public key
+            'public_key' => ['required', 'string', 'unique:keys'], // validation for public key
         ];
     }
 

@@ -11,7 +11,6 @@ use Illuminate\Notifications\Notifiable;
 /**
  * @property int $id
  * @property string $username
- * @property string $public_key
  * @property Key $key
  */
 class User extends Model
@@ -19,8 +18,7 @@ class User extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'username',
-        'public_key'
+        'username'
     ];
 
     public function key(): HasOne

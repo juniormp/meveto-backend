@@ -23,7 +23,6 @@ class UserFactory extends Factory
     {
         return [
             'username' => $this->faker->name(),
-            'public_key' => $this->faker->text
         ];
     }
 }

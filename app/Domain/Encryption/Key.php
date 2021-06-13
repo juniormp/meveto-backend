@@ -10,14 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $public_key
- * @property string $private_key
  */
 class Key extends Model
 {
     protected $fillable = [
         'user_id',
-        'public_key',
-        'private_key'
+        'public_key'
     ];
 
     public function user(): BelongsTo

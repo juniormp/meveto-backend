@@ -17,7 +17,6 @@ class CreateKeysTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->text('public_key');
-            $table->text('private_key');
             $table->timestamps();
         });
     }
