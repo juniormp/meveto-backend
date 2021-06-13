@@ -15,4 +15,9 @@ class StorageRepository extends BaseRepository implements IStorageRepository
     {
         parent::__construct($this->model);
     }
+
+    public function findSecretByName(string $secretName): Storage
+    {
+        return Storage::where('secret_name', $secretName)->first();
+    }
 }

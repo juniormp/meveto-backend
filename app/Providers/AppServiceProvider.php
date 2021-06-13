@@ -20,8 +20,10 @@ class AppServiceProvider extends ServiceProvider
         //Repository
         IUserRepository::class => UserRepository::class,
         IKeyRepository::class => KeyRepository::class,
+        IStorageRepository::class => StorageRepository::class,
+
+        // Infrastructure Service
         IEncryptionHandlerService::class => EncryptionHandlerService::class,
-        IStorageRepository::class => StorageRepository::class
 
     ];
 
