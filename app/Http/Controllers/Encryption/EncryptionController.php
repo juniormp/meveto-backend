@@ -52,6 +52,6 @@ class EncryptionController extends Controller
         $encryptedSecret = $this->findSecret->execute($command);
 
         return ResponseBuilder::asSuccess()->withData(FindSecretResponse::build($encryptedSecret))
-            ->withHttpCode(201)->build();
+            ->withHttpCode(200)->build();
     }
 }
