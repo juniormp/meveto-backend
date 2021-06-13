@@ -4,37 +4,29 @@
 namespace App\Http\Controllers\Encryption;
 
 
-use App\Application\Encryption\Command\FindServerKeyCommand;
 use App\Application\Encryption\Command\StoreSecretDataCommand;
-use App\Application\Encryption\FindServerKeyUseCase;
 use App\Application\Encryption\StoreSecretDataUseCase;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Encryption\Request\FindServerKeyRequest;
 use App\Http\Controllers\Encryption\Request\StoreSecretDataRequest;
-use App\Http\Controllers\Encryption\Response\FindServerKeyResponse;
+use Illuminate\Http\Request;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 
 class EncryptionController extends Controller
 {
-    private FindServerKeyUseCase $findServerKey;
     private StoreSecretDataUseCase $storeSecretData;
 
-    public function __construct(FindServerKeyUseCase $findServerKey, StoreSecretDataUseCase $storeSecretData)
+    public function __construct(StoreSecretDataUseCase $storeSecretData)
     {
-        $this->findServerKey = $findServerKey;
         $this->storeSecretData = $storeSecretData;
     }
 
-    public function findServerKey(FindServerKeyRequest $request): Response
+    public function findServerKey(Request $request): Response
     {
-        $command = new FindServerKeyCommand($request->getData());
-        $publicKey = $this->findServerKey->execute($command);
+        $publicKey = env('PUBLIC_KEY', null);
 
-        $data = FindServerKeyResponse::build($publicKey);
-
-        return ResponseBuilder::asSuccess()->withData($data)
+        return ResponseBuilder::asSuccess()->withData($publicKey)
             ->withHttpCode(200)->build();
     }
 

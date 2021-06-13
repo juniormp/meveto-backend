@@ -27,7 +27,7 @@ class StoreSecretDataUseCase
 
         $key = RSA::load($user->key->public_key);
 
-        dd($key-);
+        dd();
 
         $key = $this->keyRepository->findByUserId($user->id);
 
