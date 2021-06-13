@@ -24,16 +24,18 @@ class EncryptionController extends Controller
 
     public function findServerKey(Request $request): Response
     {
-        $publicKey = env('PUBLIC_KEY', null);
+        $publicKey = env('PUBLIC_KEY');
 
         return ResponseBuilder::asSuccess()->withData($publicKey)
             ->withHttpCode(200)->build();
     }
 
-    public function storeSecretData(StoreSecretDataRequest $request)
+    public function storeSecretData(StoreSecretDataRequest $request): Response
     {
         $command = new StoreSecretDataCommand($request->getData());
         $this->storeSecretData->execute($command);
-dd($command);
+
+        return ResponseBuilder::asSuccess()
+            ->withHttpCode(201)->build();
     }
 }
