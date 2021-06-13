@@ -4,33 +4,33 @@
 namespace App\Application\Encryption;
 
 
-use App\Application\Encryption\Command\FindServerKeyCommand;
 use App\Application\Encryption\Command\StoreSecretDataCommand;
+use App\Domain\Storage\StorageFactory;
 use App\Infrastructure\Repository\Auth\IUserRepository;
-use App\Infrastructure\Repository\Encryption\IKeyRepository;
-use phpseclib3\Crypt\RSA;
+use App\Infrastructure\Repository\Storage\IStorageRepository;
+
 
 class StoreSecretDataUseCase
 {
-    private IKeyRepository $keyRepository;
     private IUserRepository $userRepository;
+    private StorageFactory $storageFactory;
+    private IStorageRepository $storageRepository;
 
-    public function __construct(IKeyRepository $keyRepository, IUserRepository $userRepository)
+    public function __construct(
+        IUserRepository $userRepository,
+        StorageFactory $storageFactory,
+        IStorageRepository $storageRepository
+    )
     {
-        $this->keyRepository = $keyRepository;
         $this->userRepository = $userRepository;
+        $this->storageFactory = $storageFactory;
+        $this->storageRepository = $storageRepository;
     }
 
-    public function execute(StoreSecretDataCommand $command): string
+    public function execute(StoreSecretDataCommand $command): void
     {
         $user = $this->userRepository->findByUsername($command->username);
-
-        $key = RSA::load($user->key->public_key);
-
-        dd();
-
-        $key = $this->keyRepository->findByUserId($user->id);
-
-        return $key->public_key;
+        $storage = $this->storageFactory->create($user, $command->secretName, $command->encryptedSecret);
+        $this->storageRepository->save($storage);
     }
 }
