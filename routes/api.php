@@ -20,7 +20,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('encryption')->group(function () {
-    Route::post('getServerKey', [EncryptionController::class, 'findServerKey']);
+    Route::get('getServerKey', [EncryptionController::class, 'findServerKey']);
     Route::post('storeSecret', [EncryptionController::class, 'storeSecretData']);
 });
 

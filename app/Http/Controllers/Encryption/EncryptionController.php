@@ -24,7 +24,7 @@ class EncryptionController extends Controller
 
     public function findServerKey(Request $request): Response
     {
-        $publicKey = env('PUBLIC_KEY');
+        $publicKey = config('PUBLIC_KEY');
 
         return ResponseBuilder::asSuccess()->withData($publicKey)
             ->withHttpCode(200)->build();
