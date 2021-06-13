@@ -7,7 +7,6 @@ namespace Tests\Feature\StoreSecret;
 use App\Domain\Auth\User;
 use App\Domain\Storage\Storage;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Spatie\Crypto\Rsa\KeyPair;
 use Spatie\Crypto\Rsa\PublicKey;
 use Tests\TestCase;
 
@@ -24,12 +23,12 @@ class Scenario1Test extends TestCase
      */
     public function test_successfully_store_secret()
     {
-        [$privateKey, $publicKey] = (new KeyPair())->generate();
-        config(['PRIVATE_KEY' => $privateKey, 'PUBLIC_KEY' => $publicKey]);
-        $this->assertEquals($privateKey, config('PRIVATE_KEY'));
-        $this->assertEquals($publicKey, config('PUBLIC_KEY'));
-        $plainText = 'text to be encrypt';
+        $publicKey = file_get_contents('tests/app-public-key.pem');
+        putenv("PUBLIC_KEY=$publicKey");
+        $privateKey = file_get_contents('tests/app-private-key.pem');
+        putenv("PRIVATE_KEY=$privateKey");
 
+        $plainText = 'text to be encrypt';
         $encryptedSecret = $this->encryptDataWithServerKey($publicKey, $plainText);
 
         $user = User::factory()->create(['username' => 'mauricio']);

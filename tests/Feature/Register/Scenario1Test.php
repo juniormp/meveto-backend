@@ -6,7 +6,7 @@ namespace Tests\Feature\Register;
 
 use App\Domain\Auth\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Spatie\Crypto\Rsa\KeyPair;
+use Tests\Helper\CleanString;
 use Tests\TestCase;
 
 class Scenario1Test extends TestCase
@@ -22,10 +22,11 @@ class Scenario1Test extends TestCase
      */
     public function test_successfully_register()
     {
-        [$privateKey, $publicKey] = (new KeyPair())->generate();
+        $publicKey = file_get_contents('tests/user-public-key.pem');
+
         $data = [
             "username" => "mauricio",
-            "public_key" => $text = preg_replace("/\r|\n/", "", $publicKey)
+            "public_key" => $publicKey
         ];
 
         $response = $this->json('POST', 'api/auth/register', $data);
@@ -47,6 +48,6 @@ class Scenario1Test extends TestCase
         $user = User::first();
         $this->assertDatabaseCount(User::class, 1);
         $this->assertEquals($data['username'], $user->username);
-        $this->assertEquals($data['public_key'], $user->key->public_key);
+        $this->assertEquals(CleanString::clean($data['public_key']), CleanString::clean($user->key->public_key));
     }
 }

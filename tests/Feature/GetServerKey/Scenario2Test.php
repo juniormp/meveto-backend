@@ -17,7 +17,7 @@ class Scenario2Test extends TestCase
      */
     public function test_successfully_retrieves_nullable()
     {
-        $this->assertEquals(null, config('PUBLIC_KEY'));
+        putenv("PUBLIC_KEY=null");
 
         $response = $this->json('GET', 'api/encryption/getServerKey');
 
@@ -29,7 +29,9 @@ class Scenario2Test extends TestCase
                     "code" => 0,
                     "locale" => "en",
                     "message" => "OK",
-                    "data" => null
+                    "data" => [
+                        "public_key" => null
+                    ]
                 ]
             );
     }

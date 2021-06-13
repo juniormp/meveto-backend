@@ -4,7 +4,6 @@
 namespace Tests\Feature\GetServerKey;
 
 
-use Spatie\Crypto\Rsa\KeyPair;
 use Tests\TestCase;
 
 class Scenario1Test extends TestCase
@@ -18,9 +17,8 @@ class Scenario1Test extends TestCase
      */
     public function test_successfully_retrieves_server_public_key()
     {
-        [$privateKey, $publicKey] = (new KeyPair())->generate();
-        config(['PUBLIC_KEY' => $publicKey]);
-        $this->assertEquals($publicKey, config('PUBLIC_KEY'));
+        $publicKey = file_get_contents('tests/app-public-key.pem');
+        putenv("PUBLIC_KEY=$publicKey");
 
         $response = $this->json('GET', 'api/encryption/getServerKey');
 
@@ -33,7 +31,7 @@ class Scenario1Test extends TestCase
                     "locale" => "en",
                     "message" => "OK",
                     "data" => [
-                        "value" => $publicKey
+                        "public_key" => $publicKey
                     ]
                 ]
             );

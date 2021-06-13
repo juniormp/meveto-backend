@@ -23,12 +23,12 @@ class Scenario2Test extends TestCase
      */
     public function test_throws_exception_if_data_could_not_be_decrypted()
     {
-        [$privateKey, $publicKey] = (new KeyPair())->generate();
-        config(['PRIVATE_KEY' => $privateKey, 'PUBLIC_KEY' => $publicKey]);
-        $this->assertEquals($privateKey, config('PRIVATE_KEY'));
-        $this->assertEquals($publicKey, config('PUBLIC_KEY'));
-        $plainText = 'text to be encrypt';
+        $publicKey = file_get_contents('tests/app-public-key.pem');
+        putenv("PUBLIC_KEY=$publicKey");
+        $privateKey = file_get_contents('tests/app-private-key.pem');
+        putenv("PRIVATE_KEY=$privateKey");
 
+        $plainText = 'text to be encrypt';
         $encryptedSecret = $this->encryptDataWithServerKey($publicKey, $plainText);
 
         $user = User::factory()->create(['username' => 'mauricio']);

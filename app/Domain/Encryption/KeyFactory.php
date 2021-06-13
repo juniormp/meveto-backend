@@ -10,7 +10,7 @@ class KeyFactory
     {
         return new Key([
             'user_id' => $userId,
-            'public_key' => preg_replace("/\r|\n/", "", $publicKey),
+            'public_key' => $publicKey,
         ]);
     }
 }
