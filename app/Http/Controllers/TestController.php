@@ -18,8 +18,16 @@ class TestController extends Controller
 
     public function foo(Request $request)
     {
+       // $this->encryptWithServerKey();
         $this->createKey();
         $this->test();
+    }
+
+    public function encryptWithServerKey()
+    {
+        $publicKey = PublicKey::fromString(env('PUBLIC_KEY'));
+        $encrypt = base64_encode($publicKey->encrypt('123'));
+        dd($encrypt);
     }
 
     public function createKey()

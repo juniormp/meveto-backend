@@ -4,7 +4,6 @@
 namespace App\Http\Controllers\Encryption\Response;
 
 
-use App\Domain\Auth\User;
 
 class FindServerKeyResponse
 {
