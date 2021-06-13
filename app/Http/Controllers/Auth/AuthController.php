@@ -30,6 +30,6 @@ class AuthController extends Controller
         $data = RegisterResponse::build($user);
 
         return ResponseBuilder::asSuccess()->withData($data)
-            ->withHttpCode(200)->build();
+            ->withHttpCode(201)->build();
     }
 }

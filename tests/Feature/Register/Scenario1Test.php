@@ -1,31 +1,37 @@
 <?php
 
 
-namespace Tests\Feature\GetServerKey;
+namespace Tests\Feature\Register;
 
 
+use App\Domain\Auth\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Spatie\Crypto\Rsa\KeyPair;
 use Tests\TestCase;
 
 class Scenario1Test extends TestCase
 {
+    use DatabaseMigrations;
+
     /*
-     * User successfully retrieves server public key
+     * User successfully register on application
      *
      * GIVEN the User on terminal
-     * WHEN them request /getServerKey
-     * THEN retrieves server public key
+     * WHEN them request /register with username and public_key
+     * THEN the User is registered on application
      */
-    public function test_successfully_retrieves_server_public_key()
+    public function test_successfully_register()
     {
         [$privateKey, $publicKey] = (new KeyPair())->generate();
-        config(['PUBLIC_KEY' => $publicKey]);
-        $this->assertEquals($publicKey, config('PUBLIC_KEY'));
+        $data = [
+            "username" => "mauricio",
+            "public_key" => $text = preg_replace("/\r|\n/", "", $publicKey)
+        ];
 
-        $response = $this->json('GET', 'api/encryption/getServerKey');
+        $response = $this->json('POST', 'api/auth/register', $data);
 
         $response
-            ->assertStatus(200)
+            ->assertStatus(201)
             ->assertJson(
                 [
                     "success" => true,
@@ -33,9 +39,14 @@ class Scenario1Test extends TestCase
                     "locale" => "en",
                     "message" => "OK",
                     "data" => [
-                        "value" => $publicKey
+                        "username" => $data['username']
                     ]
                 ]
             );
+
+        $user = User::first();
+        $this->assertCount(1, User::all());
+        $this->assertEquals($data['username'], $user->username);
+        $this->assertEquals($data['public_key'], $user->key->public_key);
     }
 }
