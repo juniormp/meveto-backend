@@ -22,7 +22,7 @@ class StorageFactory
             'user_id' => $user->id,
             'secret_name' => $secretName,
             'encrypted_secret' => $this->encryptionHandlerService
-                ->decryptWithUserKeyAndEncryptWithServerKey($user->key->public_key, $encryptedSecret)
+                ->decryptWithServerKey($encryptedSecret)
         ]);
     }
 }

@@ -45,7 +45,7 @@ class Scenario1Test extends TestCase
             );
 
         $user = User::first();
-        $this->assertCount(1, User::all());
+        $this->assertDatabaseCount(User::class, 1);
         $this->assertEquals($data['username'], $user->username);
         $this->assertEquals($data['public_key'], $user->key->public_key);
     }

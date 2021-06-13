@@ -18,8 +18,8 @@ class StoreSecretDataRequest extends BaseRequest
     {
         return [
             'username' => ['required', 'string', 'min:3', 'max:20', 'exists:users'],
-            'secret_name' => ['required', 'string', 'min:3', 'max:500'],
-            'encrypted_secret' => ['required', 'string', 'min:3', 'max:1000'],
+            'secret_name' => ['required', 'string', 'min:3', 'max:100'],
+            'encrypted_secret' => ['required', 'string', 'min:3'],
         ];
     }
 

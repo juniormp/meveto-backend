@@ -31,6 +31,7 @@ class StoreSecretDataUseCase
     {
         $user = $this->userRepository->findByUsername($command->username);
         $storage = $this->storageFactory->create($user, $command->secretName, $command->encryptedSecret);
+
         $this->storageRepository->save($storage);
     }
 }
