@@ -6,6 +6,10 @@ use App\Infrastructure\Repository\Auth\IUserRepository;
 use App\Infrastructure\Repository\Auth\UserRepository;
 use App\Infrastructure\Repository\Encryption\IKeyRepository;
 use App\Infrastructure\Repository\Encryption\KeyRepository;
+use App\Infrastructure\Repository\Storage\IStorageRepository;
+use App\Infrastructure\Repository\Storage\StorageRepository;
+use App\Infrastructure\Service\EncryptionHandlerService;
+use App\Infrastructure\Service\IEncryptionHandlerService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
 
         //Repository
         IUserRepository::class => UserRepository::class,
-        IKeyRepository::class => KeyRepository::class
+        IKeyRepository::class => KeyRepository::class,
+        IEncryptionHandlerService::class => EncryptionHandlerService::class,
+        IStorageRepository::class => StorageRepository::class
 
     ];
 
