@@ -33,6 +33,7 @@ class EncryptionHandlerService implements IEncryptionHandlerService
         );
 
         $plainText = $serverPrivateKey->decrypt(base64_decode($storage->encrypted_secret));
+
         $userPublicKey = PublicKey::fromString($user->key->public_key);
 
         return base64_encode($userPublicKey->encrypt($plainText));
