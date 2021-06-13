@@ -40,7 +40,11 @@ class Scenario1Test extends TestCase
         ]);
 
         $data = "$user->username&secret_name=$storage->secret_name";
-        $response = $this->json('GET', "api/encryption/getSecret?username=$data");
+
+        $signature = $this->signRequest($user->username);
+        $header = ["signature" => $signature];
+
+        $response = $this->json('GET', "api/encryption/getSecret?username=$data", [], $header);
 
         $response->assertStatus(200);
 
@@ -67,5 +71,12 @@ class Scenario1Test extends TestCase
         $privateKey = PrivateKey::fromString($userPrivateKey);
 
         return $privateKey->decrypt(base64_decode($encryptedData));
+    }
+
+    private function signRequest(string $username): string
+    {
+        $privateKey = file_get_contents('tests/user-private-key.pem');
+
+        return PrivateKey::fromString($privateKey)->sign($username);
     }
 }

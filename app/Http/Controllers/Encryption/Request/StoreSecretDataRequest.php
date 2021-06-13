@@ -5,13 +5,21 @@ namespace App\Http\Controllers\Encryption\Request;
 
 
 use App\Http\Controllers\BaseRequest;
+use App\Http\Controllers\Encryption\Policy\StoreSecretDataPolicy;
 
 
 class StoreSecretDataRequest extends BaseRequest
 {
+    private StoreSecretDataPolicy $secretDataPolicy;
+
+    public function __construct(StoreSecretDataPolicy $findSecretPolicy)
+    {
+        $this->secretDataPolicy = $findSecretPolicy;
+    }
+
     public function authorize(): bool
     {
-        return true;
+        return $this->secretDataPolicy->validate($this->getData()['username'], $this->header('signature'));
     }
 
     public function rules(): array

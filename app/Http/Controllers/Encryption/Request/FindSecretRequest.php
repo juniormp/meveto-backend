@@ -6,14 +6,22 @@ namespace App\Http\Controllers\Encryption\Request;
 
 use App\Domain\Auth\User;
 use App\Http\Controllers\BaseRequest;
+use App\Http\Controllers\Encryption\Policy\FindSecretPolicy;
 use Illuminate\Validation\Rule;
 
 
 class FindSecretRequest extends BaseRequest
 {
+    private FindSecretPolicy $findSecretPolicy;
+
+    public function __construct(FindSecretPolicy $findSecretPolicy)
+    {
+        $this->findSecretPolicy = $findSecretPolicy;
+    }
+
     public function authorize(): bool
     {
-        return true;
+        return $this->findSecretPolicy->validate($this->getData()['username'], $this->header('signature'));
     }
 
     public function rules(): array
