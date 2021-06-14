@@ -52,6 +52,9 @@ class Handler extends ExceptionHandler
                 ->build();
         }
 
-        return parent::render($request, $exception);
+        return ResponseBuilder::asError(104)
+            ->withData($exception->getMessage())
+            ->withHttpCode(500)
+            ->build();
     }
 }
