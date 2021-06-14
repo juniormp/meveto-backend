@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Encryption\Request;
 
 
+use App\Exceptions\Controllers\InvalidSignatureException;
 use App\Http\Controllers\BaseRequest;
 use App\Http\Controllers\Encryption\Policy\StoreSecretDataPolicy;
 
@@ -19,6 +20,8 @@ class StoreSecretDataRequest extends BaseRequest
 
     public function authorize(): bool
     {
+        throw_if(is_null($this->header('signature')), new InvalidSignatureException());
+
         return $this->secretDataPolicy->validate($this->getData()['username'], $this->header('signature'));
     }
 
@@ -27,7 +30,7 @@ class StoreSecretDataRequest extends BaseRequest
         return [
             'username' => ['required', 'string', 'min:3', 'max:20', 'exists:users'],
             'secret_name' => ['required', 'string', 'min:3', 'max:100'],
-            'encrypted_secret' => ['required', 'string', 'min:3'],
+            'encrypted_secret' => ['required', 'string', 'min:3']
         ];
     }
 

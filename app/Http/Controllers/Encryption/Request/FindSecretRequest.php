@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Encryption\Request;
 
 
 use App\Domain\Auth\User;
+use App\Exceptions\Controllers\InvalidSignatureException;
 use App\Http\Controllers\BaseRequest;
 use App\Http\Controllers\Encryption\Policy\FindSecretPolicy;
 use Illuminate\Validation\Rule;
@@ -21,6 +22,8 @@ class FindSecretRequest extends BaseRequest
 
     public function authorize(): bool
     {
+        throw_if(is_null($this->header('signature')), new InvalidSignatureException());
+
         return $this->findSecretPolicy->validate($this->getData()['username'], $this->header('signature'));
     }
 
